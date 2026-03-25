@@ -1,10 +1,10 @@
-
-import {View, FlatList, StyleSheet, Text, StatusBar} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet,FlatList, Text, View , Image} from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
 
 const Data=[  
-    {
+      {
     dt_txt: "2026-02-15 18:00:00",
       main: {
         "temp_min": 10.1,
@@ -41,51 +41,97 @@ const Data=[
       ]
     }
     ]
+
 const Item = (props)=>{   
-    const {dt_txt, min, max, condition} = props
+    const {dt_txt, min, max, condition} =props
     return(
-        <View>
-           <AntDesign name="sun" size={25} color="black"/>
+        <View style={styles.item}>
+           <Feather name="sun" size={25} color="black"/>
             <Text>{dt_txt}</Text>
             <Text>{min}</Text>
-            <Text>{max}</Text>    
-             
+            <Text>{max}</Text>            
         </View>
     )
 }
-
-export default function CurrentWeather() {
+export default function UpCommingWeather() {
+    const renderItem=({item})=>(
+        <Item 
+        condition={item.weather[0].main}
+        dt_txt={item.dt_txt}
+        min={item.main.temp_min}
+        max={item.main.temp_max} />
+    )
   return (
     <SafeAreaProvider>
-    <SafeAreaView style={styles.wrapper}>
-      <Text style={styles.upcoming}>Upcoming weather</Text>
-        <FlatList 
+    <SafeAreaView style={styles.container}> 
+      <Image source={require('../../../pics/pic1.jpg')} style={styles.Image}/>
+         <FlatList
         data={Data}
-        renderItem={({item}) => <Item dt_txt={item.dt_txt} min={item.main.temp_min} max={item.main.temp_max} condition={item.weather[0].main} />}
+        renderItem={renderItem}
         keyExtractor={item => item.dt_txt}
-      />
-
-    </SafeAreaView>
+        ItemSeparatorComponent={()=><View style={styles.separator}/>}
+        ListEmptyComponent={()=><Text>No data available</Text>}/>
+        </SafeAreaView>
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-   upcoming: {
-    paddingTop: 100,
-    fontSize: 30,
-    color: 'white',
-    textAlign: 'center'
+  separator:{ 
+    height: 1, 
+    backgroundColor: 'black',
+    margin: 5
   },
-   item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+ container: {
+ // alignItems: 'center',
+   backgroundColor: 'orange', 
+   marginTop: StatusBar.currentHeight || 0,
+   flex:1, 
+   justifyContent:'center'
+  },
+  temp:{ 
+      color:'black', 
+      fontSize:48 },
+  feels:{
+    color:'black',
+    fontSize:30
+  },
+  HiLo:{
+      color:'black',
+      fontSize:20
+    },
+  HiLoWrapper:{
+      flexDirection:'row'
+    },
+  bodyWrapper:{
+      backgroundColor: '#e1ef77'
+      ,justifyContent: 'flex-end',
+      alignItems: 'flex-start', 
+      marginBottom: 40, 
+      paddingLeft: 25
+    },
+  description:{
+      fontSize:48
+    },
+  message:{
+      fontSize:30
+    },
+  item: {
+        backgroundColor: 'deepskyblue',
+        padding: 20,
+        marginVertical: 8,
+        marginHorizontal: 16,
+        justifyContent:'center',
+        alignItems:'center',
+        flexDirection:'row',
+        borderWidth:5,
+        borderColor:'black'
   },
   title: {
-    fontSize: 32,
+    fontSize: 32
   },
+  Image: {
+    width: 100,
+    height: 100
+  }
 });
-
-

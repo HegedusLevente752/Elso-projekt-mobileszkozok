@@ -1,7 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,FlatList, Text, View , Image} from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Feather from '@expo/vector-icons/Feather';
+import { StyleSheet, FlatList, Text, View } from 'react-native';
+import ListItem from '../../listitem/listitem';
 
 const Data=[  
       {
@@ -42,37 +40,23 @@ const Data=[
     }
     ]
 
-const Item = (props)=>{   
-    const {dt_txt, min, max, condition} =props
-    return(
-        <View style={styles.item}>
-           <Feather name="sun" size={25} color="black"/>
-            <Text>{dt_txt}</Text>
-            <Text>{min}</Text>
-            <Text>{max}</Text>            
-        </View>
-    )
-}
 export default function UpCommingWeather() {
     const renderItem=({item})=>(
-        <Item 
+        <ListItem 
         condition={item.weather[0].main}
         dt_txt={item.dt_txt}
         min={item.main.temp_min}
         max={item.main.temp_max} />
     )
   return (
-    <SafeAreaProvider>
-    <SafeAreaView style={styles.container}> 
-      <Image source={require('../../../pics/pic1.jpg')} style={styles.Image}/>
+    <View style={styles.container}> 
          <FlatList
         data={Data}
         renderItem={renderItem}
         keyExtractor={item => item.dt_txt}
         ItemSeparatorComponent={()=><View style={styles.separator}/>}
         ListEmptyComponent={()=><Text>No data available</Text>}/>
-        </SafeAreaView>
-    </SafeAreaProvider>
+    </View>
   );
 }
 
@@ -83,11 +67,8 @@ const styles = StyleSheet.create({
     margin: 5
   },
  container: {
- // alignItems: 'center',
-   backgroundColor: 'orange', 
-   marginTop: StatusBar.currentHeight || 0,
-   flex:1, 
-   justifyContent:'center'
+   flex: 1,
+   width: '100%'
   },
   temp:{ 
       color:'black', 
@@ -116,22 +97,7 @@ const styles = StyleSheet.create({
   message:{
       fontSize:30
     },
-  item: {
-        backgroundColor: 'deepskyblue',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-        justifyContent:'center',
-        alignItems:'center',
-        flexDirection:'row',
-        borderWidth:5,
-        borderColor:'black'
-  },
   title: {
     fontSize: 32
   },
-  Image: {
-    width: 100,
-    height: 100
-  }
 });
